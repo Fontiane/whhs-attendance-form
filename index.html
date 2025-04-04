@@ -13,33 +13,83 @@
 </head>
 <body>
 <p class="p1">&lt;!DOCTYPE html&gt;</p>
-<p class="p1">&lt;html&gt;</p>
+<p class="p1">&lt;html lang="en"&gt;</p>
 <p class="p1">&lt;head&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;title&gt;WHHS Attendance&lt;/title&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta charset="UTF-8"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;title&gt;WHHS Attendance Form&lt;/title&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;style&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>body {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>font-family: sans-serif;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>padding: 20px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>max-width: 600px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>margin: auto;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>h2 {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>border-bottom: 1px solid #ccc;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>padding-bottom: 5px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>margin-top: 20px;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.group {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>margin-bottom: 15px;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>label {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>display: block;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>margin: 4px 0;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>input[type="date"] {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>padding: 6px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>margin-bottom: 20px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>width: 100%;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>button {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>padding: 10px 20px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>font-size: 16px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>margin-top: 20px;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/style&gt;</p>
 <p class="p1">&lt;/head&gt;</p>
 <p class="p1">&lt;body&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;h1&gt;Daily Attendance&lt;/h1&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;h1&gt;WHHS Football Attendance&lt;/h1&gt;</p>
 <p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;label for="attDate"&gt;Date:&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;input type="date" id="attDate" required&gt;&lt;br&gt;&lt;br&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;label for="attDate"&gt;&lt;strong&gt;Attendance Date:&lt;/strong&gt;&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;input type="date" id="attDate" required&gt;</p>
 <p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;h2&gt;Seniors&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;label&gt;&lt;input type="checkbox" value="Seniors: Doe, John"&gt; Doe, John&lt;/label&gt;&lt;br&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;label&gt;&lt;input type="checkbox" value="Seniors: Smith, Aaron"&gt; Smith, Aaron&lt;/label&gt;&lt;br&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="group"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;h2&gt;Seniors&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;label&gt;&lt;input type="checkbox" value="Seniors: Doe, John"&gt; Doe, John&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;label&gt;&lt;input type="checkbox" value="Seniors: Smith, Aaron"&gt; Smith, Aaron&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
 <p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;h2&gt;Juniors&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;label&gt;&lt;input type="checkbox" value="Juniors: Brown, Mike"&gt; Brown, Mike&lt;/label&gt;&lt;br&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="group"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;h2&gt;Juniors&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;label&gt;&lt;input type="checkbox" value="Juniors: Brown, Mike"&gt; Brown, Mike&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;label&gt;&lt;input type="checkbox" value="Juniors: Davis, Jordan"&gt; Davis, Jordan&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
 <p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;br&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;button onclick="submitForm()"&gt;Submit&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="group"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;h2&gt;Sophomores&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;label&gt;&lt;input type="checkbox" value="Sophomores: Hill, Ryan"&gt; Hill, Ryan&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="group"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;h2&gt;Freshmen&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;label&gt;&lt;input type="checkbox" value="Freshmen: Thomas, Jake"&gt; Thomas, Jake&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;button onclick="submitForm()"&gt;Submit Attendance&lt;/button&gt;</p>
 <p class="p2"><br></p>
 <p class="p1"><span class="Apple-converted-space">  </span>&lt;script&gt;</p>
 <p class="p1"><span class="Apple-converted-space">    </span>function submitForm() {</p>
 <p class="p1"><span class="Apple-converted-space">      </span>const date = document.getElementById('attDate').value;</p>
 <p class="p1"><span class="Apple-converted-space">      </span>const players = Array.from(document.querySelectorAll('input[type="checkbox"]:checked'))</p>
-<p class="p1"><span class="Apple-converted-space">                           </span>.map(cb =&gt; cb.value);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.map(cb =&gt; cb.value);</p>
 <p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>fetch('&lt;&lt;PASTE_YOUR_FLOW_URL_HERE&gt;&gt;', {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (!date) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>alert("Please select a date.");</p>
+<p class="p1"><span class="Apple-converted-space">        </span>return;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>fetch('https://your_power_automate_webhook_url_here', {</p>
 <p class="p1"><span class="Apple-converted-space">        </span>method: 'POST',</p>
 <p class="p1"><span class="Apple-converted-space">        </span>headers: { 'Content-Type': 'application/json' },</p>
 <p class="p1"><span class="Apple-converted-space">        </span>body: JSON.stringify({ date, players })</p>
