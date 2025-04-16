@@ -1,29 +1,25 @@
-from datetime import datetime
-
-today = datetime.now().strftime("%B %d, %Y")
-
-html_template = f"""<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>WHHS Attendance Form - {today}</title>
+  <title>WHHS Attendance Form - April 16, 2025</title>
   <style>
-    body {{
+    body {
       font-family: Arial, sans-serif;
       padding: 20px;
       background-color: #f2f2f2;
-    }}
-    h1 {{
+    }
+    h1 {
       text-align: center;
-    }}
-    .group {{
+    }
+    .group {
       background-color: #fff;
       padding: 15px;
       margin: 20px 0;
       border-radius: 8px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }}
-    button {{
+    }
+    button {
       display: block;
       margin: 30px auto;
       padding: 10px 20px;
@@ -33,15 +29,15 @@ html_template = f"""<!DOCTYPE html>
       border: none;
       border-radius: 5px;
       cursor: pointer;
-    }}
-    button:hover {{
+    }
+    button:hover {
       background-color: #0056b3;
-    }}
+    }
   </style>
 </head>
 <body>
 
-<h1>WHHS Football Attendance - {today}</h1>
+<h1>WHHS Football Attendance - April 16, 2025</h1>
 
 <div class="group">
   <h2>Seniors</h2>
@@ -111,42 +107,39 @@ html_template = f"""<!DOCTYPE html>
 <button onclick="submitAttendance()">Submit Attendance</button>
 
 <script>
-  function submitAttendance() {{
+  function submitAttendance() {
     const classes = ['Seniors', 'Juniors', 'Sophomores', 'Freshmen'];
-    const allPlayers = {{}};
+    const allPlayers = {};
 
-    classes.forEach(cls => {{
+    classes.forEach(cls => {
       allPlayers[cls] = [];
-      const checkboxes = document.querySelectorAll(`input[data-class="${{cls}}"]`);
-      checkboxes.forEach(box => {{
-        allPlayers[cls].push({{
+      const checkboxes = document.querySelectorAll(`input[data-class="${cls}"]`);
+      checkboxes.forEach(box => {
+        allPlayers[cls].push({
           name: box.dataset.name,
           present: box.checked
-        }});
-      }});
-    }});
+        });
+      });
+    });
 
-    fetch("YOUR_GOOGLE_WEB_APP_URL_HERE", {{
+    fetch("YOUR_GOOGLE_WEB_APP_URL_HERE", {
       method: "POST",
-      headers: {{ "Content-Type": "application/json" }},
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(allPlayers)
-    }})
-    .then(response => {{
-      if (response.ok) {{
+    })
+    .then(response => {
+      if (response.ok) {
         alert("Attendance submitted successfully.");
-      }} else {{
+      } else {
         alert("Submission failed. Please try again.");
-      }}
-    }})
-    .catch(error => {{
+      }
+    })
+    .catch(error => {
       console.error("Error submitting attendance:", error);
       alert("An error occurred while submitting attendance.");
-    }});
-  }}
+    });
+  }
 </script>
 
 </body>
 </html>
-"""
-
-html_template
