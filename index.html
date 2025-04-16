@@ -119,25 +119,30 @@
     <input type="hidden" name="date" id="formattedDate">
     <button type="submit">Submit Attendance</button>
   </form>
+<script>
+  function prepareForm() {
+    const classes = ['Seniors', 'Juniors', 'Sophomores', 'Freshmen'];
+    const allPlayers = {};
 
-  <script>
-    function prepareForm() {
-      const classes = ['Seniors', 'Juniors', 'Sophomores', 'Freshmen'];
-      const allPlayers = {};
-
-      classes.forEach(cls => {
-        allPlayers[cls] = [];
-        document.querySelectorAll('input[data-class="' + cls + '"]').forEach(box => {
-          allPlayers[cls].push({
-            name: box.dataset.name,
-            present: box.checked
-          });
+    classes.forEach(cls => {
+      allPlayers[cls] = [];
+      document.querySelectorAll('input[data-class="' + cls + '"]').forEach(box => {
+        allPlayers[cls].push({
+          name: box.dataset.name,
+          present: box.checked
         });
       });
+    });
 
-      document.getElementById("attendanceData").value = JSON.stringify(allPlayers);
-      document.getElementById("formattedDate").value = document.getElementById("attendanceDate").value;
-    }
-  </script>
+    // Set JSON string into hidden field
+    document.getElementById("attendanceData").value = JSON.stringify(allPlayers);
+
+    // Set formatted date into hidden field
+    const dateInput = document.getElementById("attendanceDate").value;
+    document.getElementById("formattedDate").value = dateInput;
+  }
+</script>
+ 
+ 
 </body>
 </html>
