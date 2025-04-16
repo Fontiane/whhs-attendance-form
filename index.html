@@ -1,25 +1,29 @@
-<!DOCTYPE html>
+from datetime import datetime
+
+today = datetime.now().strftime("%B %d, %Y")
+
+html_full_form = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>WHHS Attendance Form - April 16, 2025</title>
+  <title>WHHS Attendance Form - {today}</title>
   <style>
-    body {
+    body {{
       font-family: Arial, sans-serif;
       padding: 20px;
       background-color: #f2f2f2;
-    }
-    h1 {
+    }}
+    h1 {{
       text-align: center;
-    }
-    .group {
+    }}
+    .group {{
       background-color: #fff;
       padding: 15px;
       margin: 20px 0;
       border-radius: 8px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-    button {
+    }}
+    button {{
       display: block;
       margin: 30px auto;
       padding: 10px 20px;
@@ -29,15 +33,15 @@
       border: none;
       border-radius: 5px;
       cursor: pointer;
-    }
-    button:hover {
+    }}
+    button:hover {{
       background-color: #0056b3;
-    }
+    }}
   </style>
 </head>
 <body>
 
-<h1>WHHS Football Attendance - April 16, 2025</h1>
+<h1>WHHS Football Attendance - {today}</h1>
 
 <div class="group">
   <h2>Seniors</h2>
@@ -104,32 +108,36 @@
   <input type="checkbox" data-name="Stout, Bradley" data-class="Freshmen"> Stout, Bradley<br>
 </div>
 
-<form id="attendanceForm" method="POST" action="https://script.google.com/macros/s/AKfycbw8-KhqjXxpOv3Z_I0MsBD06-1mwkdKDqiOWIIhcmn0vkI2w6PH8bckqdnQe5Hf7Oao_Q/exec">
+<form id="attendanceForm" method="POST" action="https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID_HERE/exec">
   <input type="hidden" name="data" id="attendanceData">
   <button type="submit" onclick="prepareForm()">Submit Attendance</button>
 </form>
 
 <script>
-  function prepareForm() {
+  function prepareForm() {{
     const classes = ['Seniors', 'Juniors', 'Sophomores', 'Freshmen'];
-    const allPlayers = {};
+    const allPlayers = {{}};
 
-    classes.forEach(cls => {
+    classes.forEach(cls => {{
       allPlayers[cls] = [];
-      const checkboxes = document.querySelectorAll(`input[data-class="${cls}"]`);
-      checkboxes.forEach(box => {
-        allPlayers[cls].push({
+      const checkboxes = document.querySelectorAll(`input[data-class="${{cls}}"]`);
+      checkboxes.forEach(box => {{
+        allPlayers[cls].push({{
           name: box.dataset.name,
           present: box.checked
-        });
-      });
-    });
+        }});
+      }});
+    }});
 
-    // Set the hidden input value before form submits
     document.getElementById("attendanceData").value = JSON.stringify(allPlayers);
-  }
+  }}
 </script>
-
 
 </body>
 </html>
+"""
+
+with open("/mnt/data/index.html", "w") as f:
+    f.write(html_full_form)
+
+"/mnt/data/index.html"
