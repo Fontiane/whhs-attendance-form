@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Hills Attendance Form</title>
+  <title>WHHS Attendance Form</title>
   <link href="https://fonts.googleapis.com/css2?family=Anton&family=Open+Sans&display=swap" rel="stylesheet">
   <style>
     body {
@@ -84,91 +84,64 @@
     <img src="https://fontiane.github.io/whhs-attendance-form/Hills_White.jpeg" alt="Hills Logo">
   </div>
 
-  <h1>Hills Football Attendance</h1>
+  <h1>WHHS Football Attendance</h1>
 
   <label for="attendanceDate">Date:</label>
   <input type="date" id="attendanceDate" name="date">
-  
-  <!-- Player Groups -->
-  <div class="group"><h2>Seniors</h2>
-    <input type="checkbox" data-name="Cleveland, Micah" data-class="Seniors"> Cleveland, Micah<br>
-    <input type="checkbox" data-name="Durham, Sam" data-class="Seniors"> Durham, Sam<br>
-    <input type="checkbox" data-name="Durham, Will" data-class="Seniors"> Durham, Will<br>
-    <input type="checkbox" data-name="Flynn, Cameron" data-class="Seniors"> Flynn, Cameron<br>
-    <input type="checkbox" data-name="Higgins, Calen" data-class="Seniors"> Higgins, Calen<br>
-    <input type="checkbox" data-name="Jacobs, Joshua" data-class="Seniors"> Jacobs, Joshua<br>
-    <input type="checkbox" data-name="Phillips, Richard" data-class="Seniors"> Phillips, Richard<br>
-    <input type="checkbox" data-name="Rayborn, Derek" data-class="Seniors"> Rayborn, Derek<br>
-    <input type="checkbox" data-name="Robinson, Kingston" data-class="Seniors"> Robinson, Kingston<br>
-    <input type="checkbox" data-name="Wainscott, Zay" data-class="Seniors"> Wainscott, Zay<br>
-  </div>
 
-  <div class="group"><h2>Juniors</h2>
-    <input type="checkbox" data-name="Baker, Brady" data-class="Juniors"> Baker, Brady<br>
-    <input type="checkbox" data-name="Clark, Trenton" data-class="Juniors"> Clark, Trenton<br>
-    <input type="checkbox" data-name="Davis, Brandon" data-class="Juniors"> Davis, Brandon<br>
-    <input type="checkbox" data-name="Dobbs, Brenan - Track" data-class="Juniors"> Dobbs, Brenan - Track<br>
-    <input type="checkbox" data-name="Fishburne, Kymani" data-class="Juniors"> Fishburne, Kymani<br>
-    <input type="checkbox" data-name="Hamilton, Chase - Track" data-class="Juniors"> Hamilton, Chase - Track<br>
-    <input type="checkbox" data-name="Harris, Jayden" data-class="Juniors"> Harris, Jayden<br>
-    <input type="checkbox" data-name="Harrod, Lincoln" data-class="Juniors"> Harrod, Lincoln<br>
-    <input type="checkbox" data-name="Hartman, Cody" data-class="Juniors"> Hartman, Cody<br>
-    <input type="checkbox" data-name="Huff, Isaac" data-class="Juniors"> Huff, Isaac<br>
-    <input type="checkbox" data-name="Lewis, Ashton" data-class="Juniors"> Lewis, Ashton<br>
-    <input type="checkbox" data-name="Littrell, Jacob" data-class="Juniors"> Littrell, Jacob<br>
-    <input type="checkbox" data-name="Minnick, Kane" data-class="Juniors"> Minnick, Kane<br>
-    <input type="checkbox" data-name="Owens, Evan" data-class="Juniors"> Owens, Evan<br>
-    <input type="checkbox" data-name="Phillips, Christian" data-class="Juniors"> Phillips, Christian<br>
-    <input type="checkbox" data-name="Stallard, Timothy" data-class="Juniors"> Stallard, Timothy<br>
-    <input type="checkbox" data-name="Ware, Regan" data-class="Juniors"> Ware, Regan<br>
-    <input type="checkbox" data-name="Yarborough, Laz" data-class="Juniors"> Yarborough, Laz<br>
-  </div>
+  <!-- Dynamic Player Groups from Google Sheet -->
+  <div id="playerGroupsContainer"></div>
 
-  <div class="group"><h2>Sophomores</h2>
-    <input type="checkbox" data-name="Assibey-Mensah, Dorian" data-class="Sophomores"> Assibey-Mensah, Dorian<br>
-    <input type="checkbox" data-name="Brooks, Dai" data-class="Sophomores"> Brooks, Dai<br>
-    <input type="checkbox" data-name="Campbell, Malik" data-class="Sophomores"> Campbell, Malik<br>
-    <input type="checkbox" data-name="Crosthwaite, Tripp - Track" data-class="Sophomores"> Crosthwaite, Tripp - Track<br>
-    <input type="checkbox" data-name="Douglas, Adarius" data-class="Sophomores"> Douglas, Adarius<br>
-    <input type="checkbox" data-name="Houchins, Andrew" data-class="Sophomores"> Houchins, Andrew<br>
-    <input type="checkbox" data-name="Jackson, Jarius - Track" data-class="Sophomores"> Jackson, Jarius - Track<br>
-    <input type="checkbox" data-name="Kendall, Nicolai" data-class="Sophomores"> Kendall, Nicolai<br>
-    <input type="checkbox" data-name="Owens, Tucker" data-class="Sophomores"> Owens, Tucker<br>
-    <input type="checkbox" data-name="Scruggs, Trenton" data-class="Sophomores"> Scruggs, Trenton<br>
-  </div>
-
-  <div class="group"><h2>Freshmen</h2>
-    <input type="checkbox" data-name="Atha, Riley" data-class="Freshmen"> Atha, Riley<br>
-    <input type="checkbox" data-name="Combs, Braylen - Baseball" data-class="Freshmen"> Combs, Braylen - Baseball<br>
-    <input type="checkbox" data-name="Fenwick, John Daniel" data-class="Freshmen"> Fenwick, John Daniel<br>
-    <input type="checkbox" data-name="Fields, Zachary" data-class="Freshmen"> Fields, Zachary<br>
-    <input type="checkbox" data-name="Gillock, Cayden - Baseball" data-class="Freshmen"> Gillock, Cayden - Baseball<br>
-    <input type="checkbox" data-name="Hart, Miles" data-class="Freshmen"> Hart, Miles<br>
-    <input type="checkbox" data-name="Hartman, Shawn" data-class="Freshmen"> Hartman, Shawn<br>
-    <input type="checkbox" data-name="Johnson, Colt - Track" data-class="Freshmen"> Johnson, Colt - Track<br>
-    <input type="checkbox" data-name="Keeler, Raijon" data-class="Freshmen"> Keeler, Raijon<br>
-    <input type="checkbox" data-name="Mendoza, Erick" data-class="Freshmen"> Mendoza, Erick<br>
-    <input type="checkbox" data-name="Stout, Bradley" data-class="Freshmen"> Stout, Bradley<br>
-  </div>
-
-  <form id="attendanceForm" method="POST" onsubmit="prepareForm()" action="https://script.google.com/macros/s/AKfycbwbM-eY_ZvpmzX5h8QS0hI_HOiCy8T8g0GicPuDdKJFv1PDAerFww5DfE-OEZEtXYsQFw/exec">
+  <form id="attendanceForm" method="POST" onsubmit="prepareForm()" action="YOUR_SCRIPT_WEB_APP_URL_HERE">
     <input type="hidden" name="data" id="attendanceData">
     <input type="hidden" name="date" id="formattedDate">
     <button type="submit">Submit Attendance</button>
   </form>
 
   <script>
-    function prepareForm() {
-      const classes = ['Seniors', 'Juniors', 'Sophomores', 'Freshmen'];
-      const allPlayers = {};
+    const SCRIPT_URL = 'YOUR_SCRIPT_WEB_APP_URL_HERE';
 
-      classes.forEach(cls => {
-        allPlayers[cls] = [];
-        document.querySelectorAll('input[data-class="' + cls + '"]').forEach(box => {
-          allPlayers[cls].push({
-            name: box.dataset.name,
-            present: box.checked
+    window.onload = async function () {
+      try {
+        const response = await fetch(SCRIPT_URL);
+        const data = await response.json();
+        const container = document.getElementById('playerGroupsContainer');
+
+        Object.keys(data).sort().forEach(playerClass => {
+          const groupDiv = document.createElement('div');
+          groupDiv.className = 'group';
+
+          const header = document.createElement('h2');
+          header.textContent = playerClass;
+          groupDiv.appendChild(header);
+
+          data[playerClass].forEach(name => {
+            const label = document.createElement('label');
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.dataset.name = name;
+            checkbox.dataset.class = playerClass;
+            label.appendChild(checkbox);
+            label.innerHTML += ' ' + name;
+            groupDiv.appendChild(label);
+            groupDiv.appendChild(document.createElement('br'));
           });
+
+          container.appendChild(groupDiv);
+        });
+      } catch (err) {
+        console.error("Failed to load roster:", err);
+      }
+    };
+
+    function prepareForm() {
+      const allPlayers = {};
+      document.querySelectorAll('input[type="checkbox"]').forEach(box => {
+        const cls = box.dataset.class;
+        if (!allPlayers[cls]) allPlayers[cls] = [];
+        allPlayers[cls].push({
+          name: box.dataset.name,
+          present: box.checked
         });
       });
 
