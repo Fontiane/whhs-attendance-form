@@ -114,27 +114,28 @@
     <button type="submit" onclick="prepareForm(event)">Submit Attendance</button>
   </form>
 
-  <script>
-    function prepareForm(event) {
-      event.preventDefault(); // stop default form submit
+ <script>
+  function prepareForm(event) {
+    event.preventDefault(); // stop form submission
 
-      const classes = ['Seniors', 'Juniors', 'Sophomores', 'Freshmen'];
-      const allPlayers = {};
+    const classes = ['Seniors', 'Juniors', 'Sophomores', 'Freshmen'];
+    const allPlayers = {};
 
-      classes.forEach(cls => {
-        allPlayers[cls] = [];
-        document.querySelectorAll(`input[data-class="${cls}"]`).forEach(box => {
-          allPlayers[cls].push({
-            name: box.dataset.name,
-            present: box.checked
-          });
+    classes.forEach(function(cls) {
+      allPlayers[cls] = [];
+      const checkboxes = document.querySelectorAll('input[data-class="' + cls + '"]');
+      checkboxes.forEach(function(box) {
+        allPlayers[cls].push({
+          name: box.dataset.name,
+          present: box.checked
         });
       });
+    });
 
-      document.getElementById("attendanceData").value = JSON.stringify(allPlayers);
-      document.getElementById("attendanceForm").submit(); // now submit
-    }
-  </script>
+    document.getElementById("attendanceData").value = JSON.stringify(allPlayers);
+    document.getElementById("attendanceForm").submit();
+  }
+</script>
 
 </body>
 </html>
