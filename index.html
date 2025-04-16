@@ -3,55 +3,92 @@
 <head>
   <meta charset="UTF-8">
   <title>WHHS Attendance Form</title>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Open+Sans&display=swap" rel="stylesheet">
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Open Sans', sans-serif;
+      background-color: #121212;
+      color: #C0C0C0;
       padding: 20px;
-      background-color: #f2f2f2;
+      background-image: url('https://images.unsplash.com/photo-1603808033192-082d6919a144?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');
+      background-size: cover;
+      background-attachment: fixed;
     }
+
+    .logo-container {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .logo-container img {
+      width: 150px;
+      height: auto;
+    }
+
     h1 {
       text-align: center;
+      font-family: 'Anton', sans-serif;
+      font-size: 3em;
+      color: #C0C0C0;
+      text-shadow: 2px 2px #006400;
     }
-    .group {
-      background-color: #fff;
-      padding: 15px;
-      margin: 20px 0;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-    button {
-      display: block;
-      margin: 30px auto;
-      padding: 10px 20px;
-      font-size: 16px;
-      background-color: #007BFF;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #0056b3;
-    }
+
     label {
       font-weight: bold;
       display: block;
-      margin-top: 20px;
+      margin: 20px 0 10px;
+      font-size: 18px;
+      color: #C0C0C0;
     }
+
     input[type="date"] {
-      margin-bottom: 20px;
       font-size: 16px;
       padding: 5px;
+      border-radius: 5px;
+      border: 1px solid #999;
+    }
+
+    .group {
+      background-color: rgba(0, 100, 0, 0.85);
+      padding: 15px;
+      margin: 20px 0;
+      border-radius: 8px;
+      box-shadow: 0 0 15px rgba(192, 192, 192, 0.4);
+    }
+
+    .group h2 {
+      color: #fff;
+    }
+
+    button {
+      display: block;
+      margin: 30px auto;
+      padding: 12px 24px;
+      font-size: 18px;
+      background-color: #006400;
+      color: #C0C0C0;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #004d00;
     }
   </style>
 </head>
 <body>
 
+  <div class="logo-container">
+    <img src="https://fontiane.github.io/whhs-attendance-form/hills_black.png" alt="Hills Logo">
+  </div>
+
   <h1>WHHS Football Attendance</h1>
 
   <label for="attendanceDate">Date:</label>
   <input type="date" id="attendanceDate" name="date">
-
+  
   <!-- Player Groups -->
   <div class="group"><h2>Seniors</h2>
     <input type="checkbox" data-name="Cleveland, Micah" data-class="Seniors"> Cleveland, Micah<br>
@@ -114,35 +151,31 @@
     <input type="checkbox" data-name="Stout, Bradley" data-class="Freshmen"> Stout, Bradley<br>
   </div>
 
-  <form id="attendanceForm" method="POST" onsubmit="prepareForm()" action="https://script.google.com/macros/s/AKfycbwu5nTWpvU4GtVoaV7ojrJ42iRCw9KOatXyk3yTWsg_5s3-kpRe7-fYwEJjd14ulSLt3Q/exec">
+  <form id="attendanceForm" method="POST" onsubmit="prepareForm()" action="YOUR_SCRIPT_WEB_APP_URL_HERE">
     <input type="hidden" name="data" id="attendanceData">
     <input type="hidden" name="date" id="formattedDate">
     <button type="submit">Submit Attendance</button>
   </form>
-<script>
-  function prepareForm() {
-    const classes = ['Seniors', 'Juniors', 'Sophomores', 'Freshmen'];
-    const allPlayers = {};
 
-    classes.forEach(cls => {
-      allPlayers[cls] = [];
-      document.querySelectorAll('input[data-class="' + cls + '"]').forEach(box => {
-        allPlayers[cls].push({
-          name: box.dataset.name,
-          present: box.checked
+  <script>
+    function prepareForm() {
+      const classes = ['Seniors', 'Juniors', 'Sophomores', 'Freshmen'];
+      const allPlayers = {};
+
+      classes.forEach(cls => {
+        allPlayers[cls] = [];
+        document.querySelectorAll('input[data-class="' + cls + '"]').forEach(box => {
+          allPlayers[cls].push({
+            name: box.dataset.name,
+            present: box.checked
+          });
         });
       });
-    });
 
-    // Set JSON string into hidden field
-    document.getElementById("attendanceData").value = JSON.stringify(allPlayers);
+      document.getElementById("attendanceData").value = JSON.stringify(allPlayers);
+      document.getElementById("formattedDate").value = document.getElementById("attendanceDate").value;
+    }
+  </script>
 
-    // Set formatted date into hidden field
-    const dateInput = document.getElementById("attendanceDate").value;
-    document.getElementById("formattedDate").value = dateInput;
-  }
-</script>
- 
- 
 </body>
 </html>
