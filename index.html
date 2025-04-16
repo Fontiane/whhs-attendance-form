@@ -1,47 +1,49 @@
+from datetime import datetime
 
-<!DOCTYPE html>
+today = datetime.now().strftime("%B %d, %Y")
+
+html_template = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>WHHS Attendance Form</title>
+  <title>WHHS Attendance Form - {today}</title>
   <style>
-    body {
-      font-family: sans-serif;
+    body {{
+      font-family: Arial, sans-serif;
       padding: 20px;
-      max-width: 700px;
-      margin: auto;
-    }
-    h2 {
-      border-bottom: 1px solid #ccc;
-      padding-bottom: 5px;
-      margin-top: 20px;
-    }
-    .group {
-      margin-bottom: 15px;
-    }
-    label {
+      background-color: #f2f2f2;
+    }}
+    h1 {{
+      text-align: center;
+    }}
+    .group {{
+      background-color: #fff;
+      padding: 15px;
+      margin: 20px 0;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }}
+    button {{
       display: block;
-      margin: 4px 0;
-    }
-    input[type="date"] {
-      padding: 6px;
-      margin-bottom: 20px;
-      width: 100%;
-    }
-    button {
+      margin: 30px auto;
       padding: 10px 20px;
       font-size: 16px;
-      margin-top: 20px;
-    }
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }}
+    button:hover {{
+      background-color: #0056b3;
+    }}
   </style>
 </head>
 <body>
-  <h1>WHHS Football Attendance</h1>
 
-  <label for="attDate"><strong>Attendance Date:</strong></label>
-  <input type="date" id="attDate" required>
+<h1>WHHS Football Attendance - {today}</h1>
 
- <div class="group">
+<div class="group">
   <h2>Seniors</h2>
   <input type="checkbox" data-name="Cleveland, Micah" data-class="Seniors"> Cleveland, Micah<br>
   <input type="checkbox" data-name="Durham, Sam" data-class="Seniors"> Durham, Sam<br>
@@ -106,46 +108,45 @@
   <input type="checkbox" data-name="Stout, Bradley" data-class="Freshmen"> Stout, Bradley<br>
 </div>
 
+<button onclick="submitAttendance()">Submit Attendance</button>
 
+<script>
+  function submitAttendance() {{
+    const classes = ['Seniors', 'Juniors', 'Sophomores', 'Freshmen'];
+    const allPlayers = {{}};
 
-  <button onclick="submitAttendance()">Submit Attendance</button>
+    classes.forEach(cls => {{
+      allPlayers[cls] = [];
+      const checkboxes = document.querySelectorAll(`input[data-class="${{cls}}"]`);
+      checkboxes.forEach(box => {{
+        allPlayers[cls].push({{
+          name: box.dataset.name,
+          present: box.checked
+        }});
+      }});
+    }});
 
-  <script>
-function submitAttendance() {
-  const classes = ['Seniors', 'Juniors', 'Sophomores', 'Freshmen'];
-  const allPlayers = {};
-
-  // Group players by class and track presence
-  classes.forEach(cls => {
-    allPlayers[cls] = [];
-    const checkboxes = document.querySelectorAll(`input[data-class="${cls}"]`);
-    checkboxes.forEach(box => {
-      allPlayers[cls].push({
-        name: box.dataset.name,
-        present: box.checked
-      });
-    });
-  });
-
-  // Send to Power Automate Webhook
-  fetch("YOUR_FLOW_WEBHOOK_URL", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(allPlayers)
-  })
-  .then(response => {
-    if (response.ok) {
-      alert("Attendance submitted successfully.");
-    } else {
-      alert("Submission failed. Please try again or check the webhook.");
-    }
-  })
-  .catch(error => {
-    console.error("Submission error:", error);
-    alert("Error submitting attendance.");
-  });
-}
+    fetch("YOUR_GOOGLE_WEB_APP_URL_HERE", {{
+      method: "POST",
+      headers: {{ "Content-Type": "application/json" }},
+      body: JSON.stringify(allPlayers)
+    }})
+    .then(response => {{
+      if (response.ok) {{
+        alert("Attendance submitted successfully.");
+      }} else {{
+        alert("Submission failed. Please try again.");
+      }}
+    }})
+    .catch(error => {{
+      console.error("Error submitting attendance:", error);
+      alert("An error occurred while submitting attendance.");
+    }});
+  }}
 </script>
 
 </body>
 </html>
+"""
+
+html_template
