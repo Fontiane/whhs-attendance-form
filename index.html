@@ -110,28 +110,35 @@ html_full_form = f"""<!DOCTYPE html>
 
 <form id="attendanceForm" method="POST" action="https://script.google.com/macros/s/AKfycbw8-KhqjXxpOv3Z_I0MsBD06-1mwkdKDqiOWIIhcmn0vkI2w6PH8bckqdnQe5Hf7Oao_Q/exec">
   <input type="hidden" name="data" id="attendanceData">
-  <button type="submit" onclick="prepareForm()">Submit Attendance</button>
+  <button type="submit" onclick="prepareForm(event)">Submit Attendance</button>
+
 </form>
 
 <script>
-  function prepareForm() {{
-    const classes = ['Seniors', 'Juniors', 'Sophomores', 'Freshmen'];
-    const allPlayers = {{}};
+  function prepareForm(event) {
+    event.preventDefault(); // Stop the form from submitting early
 
-    classes.forEach(cls => {{
+    const classes = ['Seniors', 'Juniors', 'Sophomores', 'Freshmen'];
+    const allPlayers = {};
+
+    classes.forEach(cls => {
       allPlayers[cls] = [];
-      const checkboxes = document.querySelectorAll(`input[data-class="${{cls}}"]`);
-      checkboxes.forEach(box => {{
-        allPlayers[cls].push({{
+      const checkboxes = document.querySelectorAll(`input[data-class="${cls}"]`);
+      checkboxes.forEach(box => {
+        allPlayers[cls].push({
           name: box.dataset.name,
           present: box.checked
-        }});
-      }});
-    }});
+        });
+      });
+    });
 
     document.getElementById("attendanceData").value = JSON.stringify(allPlayers);
-  }}
+
+    // Now safely submit the form
+    document.getElementById("attendanceForm").submit();
+  }
 </script>
+
 
 </body>
 </html>
