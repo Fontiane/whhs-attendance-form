@@ -33,15 +33,27 @@
     button:hover {
       background-color: #0056b3;
     }
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 20px;
+    }
+    input[type="date"] {
+      margin-bottom: 20px;
+      font-size: 16px;
+      padding: 5px;
+    }
   </style>
 </head>
 <body>
 
   <h1>WHHS Football Attendance</h1>
 
-  <!-- SENIORS -->
-  <div class="group">
-    <h2>Seniors</h2>
+  <label for="attendanceDate">Date:</label>
+  <input type="date" id="attendanceDate" name="date">
+
+  <!-- Player Groups -->
+  <div class="group"><h2>Seniors</h2>
     <input type="checkbox" data-name="Cleveland, Micah" data-class="Seniors"> Cleveland, Micah<br>
     <input type="checkbox" data-name="Durham, Sam" data-class="Seniors"> Durham, Sam<br>
     <input type="checkbox" data-name="Durham, Will" data-class="Seniors"> Durham, Will<br>
@@ -54,9 +66,7 @@
     <input type="checkbox" data-name="Wainscott, Zay" data-class="Seniors"> Wainscott, Zay<br>
   </div>
 
-  <!-- JUNIORS -->
-  <div class="group">
-    <h2>Juniors</h2>
+  <div class="group"><h2>Juniors</h2>
     <input type="checkbox" data-name="Baker, Brady" data-class="Juniors"> Baker, Brady<br>
     <input type="checkbox" data-name="Clark, Trenton" data-class="Juniors"> Clark, Trenton<br>
     <input type="checkbox" data-name="Davis, Brandon" data-class="Juniors"> Davis, Brandon<br>
@@ -77,9 +87,7 @@
     <input type="checkbox" data-name="Yarborough, Laz" data-class="Juniors"> Yarborough, Laz<br>
   </div>
 
-  <!-- SOPHOMORES -->
-  <div class="group">
-    <h2>Sophomores</h2>
+  <div class="group"><h2>Sophomores</h2>
     <input type="checkbox" data-name="Assibey-Mensah, Dorian" data-class="Sophomores"> Assibey-Mensah, Dorian<br>
     <input type="checkbox" data-name="Brooks, Dai" data-class="Sophomores"> Brooks, Dai<br>
     <input type="checkbox" data-name="Campbell, Malik" data-class="Sophomores"> Campbell, Malik<br>
@@ -92,9 +100,7 @@
     <input type="checkbox" data-name="Scruggs, Trenton" data-class="Sophomores"> Scruggs, Trenton<br>
   </div>
 
-  <!-- FRESHMEN -->
-  <div class="group">
-    <h2>Freshmen</h2>
+  <div class="group"><h2>Freshmen</h2>
     <input type="checkbox" data-name="Atha, Riley" data-class="Freshmen"> Atha, Riley<br>
     <input type="checkbox" data-name="Combs, Braylen - Baseball" data-class="Freshmen"> Combs, Braylen - Baseball<br>
     <input type="checkbox" data-name="Fenwick, John Daniel" data-class="Freshmen"> Fenwick, John Daniel<br>
@@ -108,34 +114,30 @@
     <input type="checkbox" data-name="Stout, Bradley" data-class="Freshmen"> Stout, Bradley<br>
   </div>
 
-  <!-- ATTENDANCE SUBMISSION FORM -->
-  <form id="attendanceForm" method="POST" action="https://script.google.com/macros/s/AKfycbw8-KhqjXxpOv3Z_I0MsBD06-1mwkdKDqiOWIIhcmn0vkI2w6PH8bckqdnQe5Hf7Oao_Q/exec">
+  <form id="attendanceForm" method="POST" onsubmit="prepareForm()" action="https://script.google.com/macros/s/AKfycbw8-KhqjXxpOv3Z_I0MsBD06-1mwkdKDqiOWIIhcmn0vkI2w6PH8bckqdnQe5Hf7Oao_Q/exec">
     <input type="hidden" name="data" id="attendanceData">
-    <button type="submit" onclick="prepareForm(event)">Submit Attendance</button>
+    <input type="hidden" name="date" id="formattedDate">
+    <button type="submit">Submit Attendance</button>
   </form>
 
- <script>
-  function prepareForm(event) {
-    event.preventDefault(); // stop form submission
+  <script>
+    function prepareForm() {
+      const classes = ['Seniors', 'Juniors', 'Sophomores', 'Freshmen'];
+      const allPlayers = {};
 
-    const classes = ['Seniors', 'Juniors', 'Sophomores', 'Freshmen'];
-    const allPlayers = {};
-
-    classes.forEach(function(cls) {
-      allPlayers[cls] = [];
-      const checkboxes = document.querySelectorAll('input[data-class="' + cls + '"]');
-      checkboxes.forEach(function(box) {
-        allPlayers[cls].push({
-          name: box.dataset.name,
-          present: box.checked
+      classes.forEach(cls => {
+        allPlayers[cls] = [];
+        document.querySelectorAll('input[data-class="' + cls + '"]').forEach(box => {
+          allPlayers[cls].push({
+            name: box.dataset.name,
+            present: box.checked
+          });
         });
       });
-    });
 
-    document.getElementById("attendanceData").value = JSON.stringify(allPlayers);
-    document.getElementById("attendanceForm").submit();
-  }
-</script>
-
+      document.getElementById("attendanceData").value = JSON.stringify(allPlayers);
+      document.getElementById("formattedDate").value = document.getElementById("attendanceDate").value;
+    }
+  </script>
 </body>
 </html>
