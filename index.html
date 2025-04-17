@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>WHHS Attendance Form</title>
+  <title>Hills Football Attendance Form</title>
   <link href="https://fonts.googleapis.com/css2?family=Anton&family=Open+Sans&display=swap" rel="stylesheet">
   <style>
     body {
@@ -92,14 +92,14 @@
   <!-- Dynamic Player Groups from Google Sheet -->
   <div id="playerGroupsContainer"></div>
 
-  <form id="attendanceForm" method="POST" onsubmit="prepareForm()" action="https://script.google.com/macros/s/AKfycbwx7lGjDo4u09Ls9Ll0J9Nm2pK3MBwmZ0NkTr60QWjEtsGJtwwhXJAu_DrVyxScY-qv-g/exec">
+  <form id="attendanceForm" method="POST" onsubmit="prepareForm()" action="https://script.google.com/macros/s/AKfycby6bljgFL-ZcSmlEptDy1vmaxMhZAcHVKvE2ilooXEIdEa2FRsNuDg4Q9EUlYWpotExrw/exec">
     <input type="hidden" name="data" id="attendanceData">
     <input type="hidden" name="date" id="formattedDate">
     <button type="submit">Submit Attendance</button>
   </form>
 
   <script>
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwx7lGjDo4u09Ls9Ll0J9Nm2pK3MBwmZ0NkTr60QWjEtsGJtwwhXJAu_DrVyxScY-qv-g/exec';
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby6bljgFL-ZcSmlEptDy1vmaxMhZAcHVKvE2ilooXEIdEa2FRsNuDg4Q9EUlYWpotExrw/exec';
 
     window.onload = async function () {
       try {
