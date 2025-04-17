@@ -92,14 +92,14 @@
   <!-- Dynamic Player Groups from Google Sheet -->
   <div id="playerGroupsContainer"></div>
 
-  <form id="attendanceForm" method="POST" onsubmit="prepareForm()" action="https://script.google.com/macros/s/AKfycbx3ImYCUN-B4EfMgpw7vFKsvbSkVoGNUi-vrNMBldT8_Q1vOXxOjvaPWqSZhLHb-rt4bw/exec">
+  <form id="attendanceForm" method="POST" onsubmit="prepareForm()" action="https://script.google.com/macros/s/AKfycbwx7lGjDo4u09Ls9Ll0J9Nm2pK3MBwmZ0NkTr60QWjEtsGJtwwhXJAu_DrVyxScY-qv-g/exec">
     <input type="hidden" name="data" id="attendanceData">
     <input type="hidden" name="date" id="formattedDate">
     <button type="submit">Submit Attendance</button>
   </form>
 
   <script>
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx3ImYCUN-B4EfMgpw7vFKsvbSkVoGNUi-vrNMBldT8_Q1vOXxOjvaPWqSZhLHb-rt4bw/exec';
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwx7lGjDo4u09Ls9Ll0J9Nm2pK3MBwmZ0NkTr60QWjEtsGJtwwhXJAu_DrVyxScY-qv-g/exec';
 
     window.onload = async function () {
       try {
