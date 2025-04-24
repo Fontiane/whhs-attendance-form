@@ -92,14 +92,14 @@
   <!-- Dynamic Player Groups from Google Sheet -->
   <div id="playerGroupsContainer"></div>
 
-  <form id="attendanceForm" method="POST" onsubmit="prepareForm()" action="https://script.google.com/macros/s/AKfycbxInIECqbwFMNdEfKRHi9_kaWQID4DA1kdF5paFd8oD7IJ_F_4pP-g-Hca0tb97MDoF2w/exec">
+  <form id="attendanceForm" method="POST" onsubmit="prepareForm()" action="https://script.google.com/macros/s/AKfycbzbxjj-iNfT-5FVMRrD-NFpWnByeNOf22aoNx3EkCy12AaHWbNpvCpZNaZobllW57q9EA/exec">
     <input type="hidden" name="data" id="attendanceData">
     <input type="hidden" name="date" id="formattedDate">
     <button type="submit">Submit Attendance</button>
   </form>
 
   <script>
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxInIECqbwFMNdEfKRHi9_kaWQID4DA1kdF5paFd8oD7IJ_F_4pP-g-Hca0tb97MDoF2w/exec';
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzbxjj-iNfT-5FVMRrD-NFpWnByeNOf22aoNx3EkCy12AaHWbNpvCpZNaZobllW57q9EA/exec';
 
     // Set today's date in the date input on load
     function setTodayDate() {
