@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Hills Football Attendance Form</title>
-  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Open+Sans&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Open+Sans&display=swap" rel="stylesheet" />
   <style>
     body {
       font-family: 'Open Sans', sans-serif;
@@ -14,153 +14,152 @@
       background-size: cover;
       background-attachment: fixed;
     }
-
-    .logo-container {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    .logo-container img {
-      width: 150px;
-      height: auto;
-    }
-
+    .logo-container { text-align: center; margin-bottom: 20px; }
+    .logo-container img { width: 150px; height: auto; }
     h1 {
-      text-align: center;
-      font-family: 'Anton', sans-serif;
-      font-size: 3em;
-      color: #C0C0C0;
-      text-shadow: 2px 2px #006400;
+      text-align: center; font-family: 'Anton', sans-serif; font-size: 3em;
+      color: #C0C0C0; text-shadow: 2px 2px #006400;
     }
-
-    label {
-      font-weight: bold;
-      display: block;
-      margin: 20px 0 10px;
-      font-size: 18px;
-      color: #C0C0C0;
-    }
-
-    input[type="date"] {
-      font-size: 16px;
-      padding: 5px;
-      border-radius: 5px;
-      border: 1px solid #999;
-    }
-
+    label { font-weight: bold; display: block; margin: 20px 0 10px; font-size: 18px; color: #C0C0C0; }
+    input[type="date"] { font-size: 16px; padding: 5px; border-radius: 5px; border: 1px solid #999; }
     .group {
       background-color: rgba(0, 100, 0, 0.85);
-      padding: 15px;
-      margin: 20px 0;
-      border-radius: 8px;
+      padding: 15px; margin: 20px 0; border-radius: 8px;
       box-shadow: 0 0 15px rgba(192, 192, 192, 0.4);
     }
-
-    .group h2 {
-      color: #fff;
-    }
-
+    .group h2 { color: #fff; margin-top: 0; }
     button {
-      display: block;
-      margin: 30px auto;
-      padding: 12px 24px;
-      font-size: 18px;
-      background-color: #006400;
-      color: #C0C0C0;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
+      display: block; margin: 30px auto; padding: 12px 24px; font-size: 18px;
+      background-color: #006400; color: #C0C0C0; border: none; border-radius: 8px; cursor: pointer;
       transition: background-color 0.3s ease;
     }
-
-    button:hover {
-      background-color: #004d00;
-    }
+    button:hover { background-color: #004d00; }
+    .status { max-width: 900px; margin: 10px auto; text-align: center; }
+    .status.error { color: #ffb3b3; }
+    .status.info { color: #c0ffc0; }
   </style>
 </head>
 <body>
 
   <div class="logo-container">
-    <img src="https://fontiane.github.io/whhs-attendance-form/Hills_White.jpeg" alt="Hills Logo">
+    <img src="https://fontiane.github.io/whhs-attendance-form/Hills_White.jpeg" alt="Hills Logo" />
   </div>
 
   <h1>WHHS Football Attendance</h1>
 
+  <div id="status" class="status info" aria-live="polite">Loading roster…</div>
+
   <label for="attendanceDate">Date:</label>
-  <input type="date" id="attendanceDate" name="date">
+  <input type="date" id="attendanceDate" name="date" required />
 
   <!-- Dynamic Player Groups from Google Sheet -->
   <div id="playerGroupsContainer"></div>
 
-  <form id="attendanceForm" method="POST" onsubmit="prepareForm()" action='https://script.google.com/macros/s/AKfycbxn4z28UQGZUGKaNaexpNgz1Z-gYqYHd4VCHe75qkjDxHQi2-S5K8bUhbzlw13I59PJGw/exec'>
-    <input type="hidden" name="data" id="attendanceData">
-    <input type="hidden" name="date" id="formattedDate">
+  <form
+    id="attendanceForm"
+    method="POST"
+    onsubmit="return prepareForm()"
+    action="https://script.google.com/macros/s/AKfycbxn4z28UQGZUGKaNaexpNgz1Z-gYqYHd4VCHe75qkjDxHQi2-S5K8bUhbzlw13I59PJGw/exec"
+  >
+    <input type="hidden" name="data" id="attendanceData" />
+    <input type="hidden" name="date" id="formattedDate" />
     <button type="submit">Submit Attendance</button>
   </form>
 
   <script>
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxn4z28UQGZUGKaNaexpNgz1Z-gYqYHd4VCHe75qkjDxHQi2-S5K8bUhbzlw13I59PJGw/exec';
+    // Use the latest Web App deployment URL here:
+    const SCRIPT_URL =
+      "https://script.google.com/macros/s/AKfycbxn4z28UQGZUGKaNaexpNgz1Z-gYqYHd4VCHe75qkjDxHQi2-S5K8bUhbzlw13I59PJGw/exec";
 
-    // Set today's date in the date input on load
+    const statusEl = document.getElementById("status");
+
     function setTodayDate() {
       const today = new Date();
       const yyyy = today.getFullYear();
-      const mm = String(today.getMonth() + 1).padStart(2, '0');
-      const dd = String(today.getDate()).padStart(2, '0');
-      const formatted = `${yyyy}-${mm}-${dd}`;
-      document.getElementById('attendanceDate').value = formatted;
+      const mm = String(today.getMonth() + 1).padStart(2, "0");
+      const dd = String(today.getDate()).padStart(2, "0");
+      document.getElementById("attendanceDate").value = `${yyyy}-${mm}-${dd}`;
+    }
+
+    async function loadRoster() {
+      // Simple GET, explicit CORS mode, cache-bust query
+      const url = `${SCRIPT_URL}?t=${Date.now()}`;
+
+      const resp = await fetch(url, {
+        method: "GET",
+        mode: "cors",       // allow cross-origin (server must send ACAO header)
+        cache: "no-cache",  // avoid cached 302/old cached JSON
+        credentials: "omit" // do not send cookies
+      });
+
+      if (!resp.ok) {
+        // If Apps Script returns an error JSON, try to show it
+        let msg = `HTTP ${resp.status}`;
+        try { const j = await resp.json(); if (j && j.message) msg += ` — ${j.message}`; } catch {}
+        throw new Error(msg);
+      }
+      return resp.json();
+    }
+
+    function renderRoster(data) {
+      const container = document.getElementById("playerGroupsContainer");
+      container.innerHTML = "";
+
+      ["Seniors", "Juniors", "Sophomores", "Freshmen"].forEach((playerClass) => {
+        if (!data[playerClass] || !data[playerClass].length) return;
+
+        const groupDiv = document.createElement("div");
+        groupDiv.className = "group";
+
+        const header = document.createElement("h2");
+        header.textContent = playerClass;
+        groupDiv.appendChild(header);
+
+        data[playerClass].forEach((name) => {
+          const label = document.createElement("label");
+          const checkbox = document.createElement("input");
+          checkbox.type = "checkbox";
+          checkbox.dataset.name = name;
+          checkbox.dataset.class = playerClass;
+
+          // label text
+          label.appendChild(checkbox);
+          label.appendChild(document.createTextNode(" " + name));
+
+          groupDiv.appendChild(label);
+          groupDiv.appendChild(document.createElement("br"));
+        });
+
+        container.appendChild(groupDiv);
+      });
+    }
+
+    function prepareForm() {
+      const allPlayers = {};
+      document.querySelectorAll('input[type="checkbox"]').forEach((box) => {
+        const cls = box.dataset.class;
+        if (!allPlayers[cls]) allPlayers[cls] = [];
+        allPlayers[cls].push({ name: box.dataset.name, present: box.checked });
+      });
+
+      document.getElementById("attendanceData").value = JSON.stringify(allPlayers);
+      document.getElementById("formattedDate").value = document.getElementById("attendanceDate").value;
+      return true; // allow form submit
     }
 
     window.onload = async function () {
       setTodayDate();
       try {
-        const response = await fetch(SCRIPT_URL);
-        const data = await response.json();
-        const container = document.getElementById('playerGroupsContainer');
-
-        ['Seniors', 'Juniors', 'Sophomores', 'Freshmen'].forEach(playerClass => {
-          if (!data[playerClass]) return;
-          const groupDiv = document.createElement('div');
-          groupDiv.className = 'group';
-
-          const header = document.createElement('h2');
-          header.textContent = playerClass;
-          groupDiv.appendChild(header);
-
-          data[playerClass].forEach(name => {
-            const label = document.createElement('label');
-            const checkbox = document.createElement('input');
-            checkbox.type = 'checkbox';
-            checkbox.dataset.name = name;
-            checkbox.dataset.class = playerClass;
-            label.appendChild(checkbox);
-            label.innerHTML += ' ' + name;
-            groupDiv.appendChild(label);
-            groupDiv.appendChild(document.createElement('br'));
-          });
-
-          container.appendChild(groupDiv);
-        });
+        const data = await loadRoster();        // GET (CORS)
+        renderRoster(data);
+        statusEl.textContent = "Roster loaded.";
+        statusEl.className = "status info";
       } catch (err) {
         console.error("Failed to load roster:", err);
+        statusEl.textContent = "Failed to load roster. Please refresh or try again.";
+        statusEl.className = "status error";
       }
     };
-
-    function prepareForm() {
-      const allPlayers = {};
-      document.querySelectorAll('input[type="checkbox"]').forEach(box => {
-        const cls = box.dataset.class;
-        if (!allPlayers[cls]) allPlayers[cls] = [];
-        allPlayers[cls].push({
-          name: box.dataset.name,
-          present: box.checked
-        });
-      });
-
-      document.getElementById("attendanceData").value = JSON.stringify(allPlayers);
-      document.getElementById("formattedDate").value = document.getElementById("attendanceDate").value;
-    }
   </script>
-
 </body>
 </html>
