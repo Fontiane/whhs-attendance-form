@@ -64,13 +64,12 @@
   </form>
 
  <script>
-  // ✅ Use the exact exec URL ONCE here (no double https)
+  // ✅ Exact exec URL
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw6KHP9oEqS5Yb-x24dY8XmK_sL9Il2PERwF7Trh94qCNq3hbzdAX0mkhy1HOHKquHZnw/exec";
 
   const statusEl = document.getElementById("status");
-
-  // Keep form action in sync with SCRIPT_URL
-  document.getElementById("attendanceForm").action = SCRIPT_URL;
+  const formEl = document.getElementById("attendanceForm");
+  formEl.action = SCRIPT_URL; // keep form in sync
 
   function setTodayDate() {
     const today = new Date();
@@ -91,14 +90,21 @@
     // Unwrap { status, players } if that shape appears
     const raw = (data && typeof data === "object" && data.players) ? data.players : data;
 
-    // Normalize possible singular keys -> plurals expected by UI
-    const mapToPlural = { Senior: "Seniors", Junior: "Juniors", Sophomore: "Sophomores", Freshman: "Freshmen" };
+    // Normalize common singular/plural class labels → consistent plural keys
+    const mapToPlural = {
+      "Senior": "Seniors", "Seniors": "Seniors", "Sr": "Seniors",
+      "Junior": "Juniors", "Juniors": "Juniors", "Jr": "Juniors",
+      "Sophomore": "Sophomores", "Sophomores": "Sophomores",
+      "Freshman": "Freshmen", "Freshmen": "Freshmen", "Fr": "Freshmen"
+    };
+
     const normalized = {};
     for (const [k, v] of Object.entries(raw || {})) {
-      const key = mapToPlural[k] || k;
-      normalized[key] = Array.isArray(v) ? v : [];
+      const key = mapToPlural[k] || k;                  // standardize known labels
+      normalized[key] = Array.isArray(v) ? v : [];      // ensure arrays
     }
 
+    console.log("Roster keys:", Object.keys(normalized));
     console.log("Roster payload (normalized):", normalized);
     return normalized;
   }
@@ -107,18 +113,23 @@
     const container = document.getElementById("playerGroupsContainer");
     container.innerHTML = "";
 
-    const groups = ["Seniors", "Juniors", "Sophomores", "Freshmen"];
+    // Prefer this order first, but render ANY non-empty group
+    const preferred = ["Seniors", "Juniors", "Sophomores", "Freshmen"];
+    const keys = Object.keys(roster || {});
+    const extras = keys.filter(k => !preferred.includes(k)).sort((a,b) => a.localeCompare(b));
+    const ordered = [...preferred, ...extras];
+
     let totalRendered = 0;
 
-    groups.forEach((playerClass) => {
-      const names = roster[playerClass];
+    ordered.forEach((groupName) => {
+      const names = roster[groupName];
       if (!Array.isArray(names) || names.length === 0) return;
 
       const groupDiv = document.createElement("div");
       groupDiv.className = "group";
 
       const header = document.createElement("h2");
-      header.textContent = playerClass;
+      header.textContent = groupName;
       groupDiv.appendChild(header);
 
       names.forEach((name) => {
@@ -126,7 +137,7 @@
         const checkbox = document.createElement("input");
         checkbox.type = "checkbox";
         checkbox.dataset.name = name;
-        checkbox.dataset.class = playerClass;
+        checkbox.dataset.class = groupName;
 
         label.appendChild(checkbox);
         label.appendChild(document.createTextNode(" " + name));
