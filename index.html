@@ -67,99 +67,116 @@
   </form>
 
   <script>
-    // Use the latest Web App deployment URL here:
-    const SCRIPT_URL =
-      "https://script.google.com/macros/s/AKfycbxnxOs82anpvRaQu2lFdhM1xu_5YcLthxGIU59yoyyh6WuHLg1ld1PTgUbk5gqLlNESxg/exec";
+  // Use the latest Web App deployment URL here:
+  const SCRIPT_URL =
+    "https://script.google.com/macros/s/AKfycbxnxOs82anpvRaQu2lFdhM1xu_5YcLthxGIU59yoyyh6WuHLg1ld1PTgUbk5gqLlNESxg/exec";
 
-    const statusEl = document.getElementById("status");
+  const statusEl = document.getElementById("status");
 
-    function setTodayDate() {
-      const today = new Date();
-      const yyyy = today.getFullYear();
-      const mm = String(today.getMonth() + 1).padStart(2, "0");
-      const dd = String(today.getDate()).padStart(2, "0");
-      document.getElementById("attendanceDate").value = `${yyyy}-${mm}-${dd}`;
+  function setTodayDate() {
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, "0");
+    const dd = String(today.getDate()).padStart(2, "0");
+    document.getElementById("attendanceDate").value = `${yyyy}-${mm}-${dd}`;
+  }
+
+  async function loadRoster() {
+    const url = `${SCRIPT_URL}?t=${Date.now()}`; // cache-bust
+    const resp = await fetch(url, {
+      method: "GET",
+      // Keep this a simple GET; Apps Script JSON is readable without custom headers
+      cache: "no-cache",
+      credentials: "omit"
+    });
+
+    // Try to parse JSON even on non-200 if the script returned a JSON error
+    let data;
+    try { data = await resp.json(); }
+    catch { throw new Error(`Non-JSON response (HTTP ${resp.status})`); }
+
+    // Normalize shape: sometimes script returns {status, players:{...}}
+    const roster = data && typeof data === "object" && data.players ? data.players : data;
+
+    // Basic validation
+    if (!roster || typeof roster !== "object") {
+      throw new Error("Roster missing or invalid. Full payload: " + JSON.stringify(data));
     }
 
-    async function loadRoster() {
-      // Simple GET, explicit CORS mode, cache-bust query
-      const url = `${SCRIPT_URL}?t=${Date.now()}`;
+    console.log("Roster payload:", roster);
+    return roster;
+  }
 
-      const resp = await fetch(url, {
-        method: "GET",
-        mode: "cors",       // allow cross-origin (server must send ACAO header)
-        cache: "no-cache",  // avoid cached 302/old cached JSON
-        credentials: "omit" // do not send cookies
+  function renderRoster(roster) {
+    const container = document.getElementById("playerGroupsContainer");
+    container.innerHTML = "";
+
+    const groups = ["Seniors", "Juniors", "Sophomores", "Freshmen"];
+    let totalRendered = 0;
+
+    groups.forEach((playerClass) => {
+      const names = roster[playerClass];
+      if (!Array.isArray(names) || names.length === 0) return;
+
+      const groupDiv = document.createElement("div");
+      groupDiv.className = "group";
+
+      const header = document.createElement("h2");
+      header.textContent = playerClass;
+      groupDiv.appendChild(header);
+
+      names.forEach((name) => {
+        const label = document.createElement("label");
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.dataset.name = name;
+        checkbox.dataset.class = playerClass;
+
+        label.appendChild(checkbox);
+        label.appendChild(document.createTextNode(" " + name));
+
+        groupDiv.appendChild(label);
+        groupDiv.appendChild(document.createElement("br"));
       });
 
-      if (!resp.ok) {
-        // If Apps Script returns an error JSON, try to show it
-        let msg = `HTTP ${resp.status}`;
-        try { const j = await resp.json(); if (j && j.message) msg += ` — ${j.message}`; } catch {}
-        throw new Error(msg);
-      }
-      return resp.json();
+      container.appendChild(groupDiv);
+      totalRendered += names.length;
+    });
+
+    if (totalRendered === 0) {
+      const msg = document.createElement("div");
+      msg.className = "status error";
+      msg.textContent = "No roster rows to display. Check the 'Roster' sheet and headers.";
+      container.appendChild(msg);
     }
+  }
 
-    function renderRoster(data) {
-      const container = document.getElementById("playerGroupsContainer");
-      container.innerHTML = "";
+  function prepareForm() {
+    const allPlayers = {};
+    document.querySelectorAll('input[type="checkbox"]').forEach((box) => {
+      const cls = box.dataset.class;
+      if (!allPlayers[cls]) allPlayers[cls] = [];
+      allPlayers[cls].push({ name: box.dataset.name, present: box.checked });
+    });
 
-      ["Seniors", "Juniors", "Sophomores", "Freshmen"].forEach((playerClass) => {
-        if (!data[playerClass] || !data[playerClass].length) return;
+    document.getElementById("attendanceData").value = JSON.stringify(allPlayers);
+    document.getElementById("formattedDate").value = document.getElementById("attendanceDate").value;
+    return true; // allow form submit
+  }
 
-        const groupDiv = document.createElement("div");
-        groupDiv.className = "group";
-
-        const header = document.createElement("h2");
-        header.textContent = playerClass;
-        groupDiv.appendChild(header);
-
-        data[playerClass].forEach((name) => {
-          const label = document.createElement("label");
-          const checkbox = document.createElement("input");
-          checkbox.type = "checkbox";
-          checkbox.dataset.name = name;
-          checkbox.dataset.class = playerClass;
-
-          // label text
-          label.appendChild(checkbox);
-          label.appendChild(document.createTextNode(" " + name));
-
-          groupDiv.appendChild(label);
-          groupDiv.appendChild(document.createElement("br"));
-        });
-
-        container.appendChild(groupDiv);
-      });
+  window.onload = async function () {
+    setTodayDate();
+    try {
+      const roster = await loadRoster();
+      renderRoster(roster);
+      statusEl.textContent = "Roster loaded.";
+      statusEl.className = "status info";
+    } catch (err) {
+      console.error("Failed to load roster:", err);
+      statusEl.textContent = "Failed to load roster. " + err.message;
+      statusEl.className = "status error";
     }
-
-    function prepareForm() {
-      const allPlayers = {};
-      document.querySelectorAll('input[type="checkbox"]').forEach((box) => {
-        const cls = box.dataset.class;
-        if (!allPlayers[cls]) allPlayers[cls] = [];
-        allPlayers[cls].push({ name: box.dataset.name, present: box.checked });
-      });
-
-      document.getElementById("attendanceData").value = JSON.stringify(allPlayers);
-      document.getElementById("formattedDate").value = document.getElementById("attendanceDate").value;
-      return true; // allow form submit
-    }
-
-    window.onload = async function () {
-      setTodayDate();
-      try {
-        const data = await loadRoster();        // GET (CORS)
-        renderRoster(data);
-        statusEl.textContent = "Roster loaded.";
-        statusEl.className = "status info";
-      } catch (err) {
-        console.error("Failed to load roster:", err);
-        statusEl.textContent = "Failed to load roster. Please refresh or try again.";
-        statusEl.className = "status error";
-      }
-    };
-  </script>
+  };
+</script>
 </body>
 </html>
