@@ -4,37 +4,37 @@
   <meta charset="UTF-8" />
   <title>Hills Football Attendance Form</title>
   <link href="https://fonts.googleapis.com/css2?family=Anton&family=Open+Sans&display=swap" rel="stylesheet" />
- <style>
-  body {
-    font-family: 'Open Sans', sans-serif;
-    background-color: #000000; /* solid black */
-    color: #C0C0C0;
-    padding: 20px;
-  }
-  .logo-container { text-align: center; margin-bottom: 20px; }
-  .logo-container img { width: 150px; height: auto; }
-  h1 {
-    text-align: center; font-family: 'Anton', sans-serif; font-size: 3em;
-    color: #C0C0C0; text-shadow: 2px 2px #006400;
-  }
-  label { font-weight: bold; display: block; margin: 20px 0 10px; font-size: 18px; color: #C0C0C0; }
-  input[type="date"] { font-size: 16px; padding: 5px; border-radius: 5px; border: 1px solid #999; }
-  .group {
-    background-color: rgba(0, 100, 0, 0.85);
-    padding: 15px; margin: 20px 0; border-radius: 8px;
-    box-shadow: 0 0 15px rgba(192, 192, 192, 0.4);
-  }
-  .group h2 { color: #fff; margin-top: 0; }
-  button {
-    display: block; margin: 30px auto; padding: 12px 24px; font-size: 18px;
-    background-color: #006400; color: #C0C0C0; border: none; border-radius: 8px; cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  button:hover { background-color: #004d00; }
-  .status { max-width: 900px; margin: 10px auto; text-align: center; }
-  .status.error { color: #ffb3b3; }
-  .status.info { color: #c0ffc0; }
-</style>
+  <style>
+    body {
+      font-family: 'Open Sans', sans-serif;
+      background-color: #000000; /* solid black */
+      color: #C0C0C0;
+      padding: 20px;
+    }
+    .logo-container { text-align: center; margin-bottom: 20px; }
+    .logo-container img { width: 150px; height: auto; }
+    h1 {
+      text-align: center; font-family: 'Anton', sans-serif; font-size: 3em;
+      color: #C0C0C0; text-shadow: 2px 2px #006400;
+    }
+    label { font-weight: bold; display: block; margin: 20px 0 10px; font-size: 18px; color: #C0C0C0; }
+    input[type="date"] { font-size: 16px; padding: 5px; border-radius: 5px; border: 1px solid #999; }
+    .group {
+      background-color: rgba(0, 100, 0, 0.85);
+      padding: 15px; margin: 20px 0; border-radius: 8px;
+      box-shadow: 0 0 15px rgba(192, 192, 192, 0.4);
+    }
+    .group h2 { color: #fff; margin-top: 0; }
+    button {
+      display: block; margin: 30px auto; padding: 12px 24px; font-size: 18px;
+      background-color: #006400; color: #C0C0C0; border: none; border-radius: 8px; cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover { background-color: #004d00; }
+    .status { max-width: 900px; margin: 10px auto; text-align: center; }
+    .status.error { color: #ffb3b3; }
+    .status.info { color: #c0ffc0; }
+  </style>
 </head>
 <body>
 
@@ -59,131 +59,143 @@
     action="https://script.google.com/macros/s/AKfycbw45RhfPtOSMNTbGlvKLuNsX8Zg05NCoLWNliVZ7ldqsBwoiu3rJpGXhmeYeqweADSlDQ/exec"
   >
     <input type="hidden" name="data" id="attendanceData" />
+    <!-- Server will read this as the final MM/DD/YYYY string -->
     <input type="hidden" name="date" id="formattedDate" />
     <button type="submit">Submit Attendance</button>
   </form>
 
- <script>
-  // ✅ Exact exec URL
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw45RhfPtOSMNTbGlvKLuNsX8Zg05NCoLWNliVZ7ldqsBwoiu3rJpGXhmeYeqweADSlDQ/exec";
+  <script>
+    // ✅ Exact exec URL
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw45RhfPtOSMNTbGlvKLuNsX8Zg05NCoLWNliVZ7ldqsBwoiu3rJpGXhmeYeqweADSlDQ/exec";
 
-  const statusEl = document.getElementById("status");
-  const formEl = document.getElementById("attendanceForm");
-  formEl.action = SCRIPT_URL; // keep form in sync
+    const statusEl = document.getElementById("status");
+    const formEl = document.getElementById("attendanceForm");
+    formEl.action = SCRIPT_URL; // keep form in sync
 
-  function setTodayDate() {
-    const today = new Date();
-    const yyyy = today.getFullYear();
-    const mm = String(today.getMonth() + 1).padStart(2, "0");
-    const dd = String(today.getDate()).padStart(2, "0");
-    document.getElementById("attendanceDate").value = `${yyyy}-${mm}-${dd}`;
-  }
-
-  async function loadRoster() {
-    const url = `${SCRIPT_URL}?t=${Date.now()}`; // cache-bust
-    const resp = await fetch(url, { method: "GET", cache: "no-cache", credentials: "omit" });
-
-    let data;
-    try { data = await resp.json(); }
-    catch { throw new Error(`Non-JSON response (HTTP ${resp.status})`); }
-
-    // Unwrap { status, players } if that shape appears
-    const raw = (data && typeof data === "object" && data.players) ? data.players : data;
-
-    // Normalize common singular/plural class labels → consistent plural keys
-    const mapToPlural = {
-      "Senior": "Seniors", "Seniors": "Seniors", "Sr": "Seniors",
-      "Junior": "Juniors", "Juniors": "Juniors", "Jr": "Juniors",
-      "Sophomore": "Sophomores", "Sophomores": "Sophomores",
-      "Freshman": "Freshmen", "Freshmen": "Freshmen", "Fr": "Freshmen"
-    };
-
-    const normalized = {};
-    for (const [k, v] of Object.entries(raw || {})) {
-      const key = mapToPlural[k] || k;                  // standardize known labels
-      normalized[key] = Array.isArray(v) ? v : [];      // ensure arrays
+    function setTodayDate() {
+      const today = new Date();
+      const yyyy = today.getFullYear();
+      const mm = String(today.getMonth() + 1).padStart(2, "0");
+      const dd = String(today.getDate()).padStart(2, "0");
+      document.getElementById("attendanceDate").value = `${yyyy}-${mm}-${dd}`;
     }
 
-    console.log("Roster keys:", Object.keys(normalized));
-    console.log("Roster payload (normalized):", normalized);
-    return normalized;
-  }
+    async function loadRoster() {
+      const url = `${SCRIPT_URL}?t=${Date.now()}`; // cache-bust
+      const resp = await fetch(url, { method: "GET", cache: "no-cache", credentials: "omit" });
 
-  function renderRoster(roster) {
-    const container = document.getElementById("playerGroupsContainer");
-    container.innerHTML = "";
+      let data;
+      try { data = await resp.json(); }
+      catch { throw new Error(`Non-JSON response (HTTP ${resp.status})`); }
 
-    // Prefer this order first, but render ANY non-empty group
-    const preferred = ["Seniors", "Juniors", "Sophomores", "Freshmen"];
-    const keys = Object.keys(roster || {});
-    const extras = keys.filter(k => !preferred.includes(k)).sort((a,b) => a.localeCompare(b));
-    const ordered = [...preferred, ...extras];
+      // Unwrap { status, players } if that shape appears
+      const raw = (data && typeof data === "object" && data.players) ? data.players : data;
 
-    let totalRendered = 0;
+      // Normalize common singular/plural class labels → consistent plural keys
+      const mapToPlural = {
+        "Senior": "Seniors", "Seniors": "Seniors", "Sr": "Seniors",
+        "Junior": "Juniors", "Juniors": "Juniors", "Jr": "Juniors",
+        "Sophomore": "Sophomores", "Sophomores": "Sophomores",
+        "Freshman": "Freshmen", "Freshmen": "Freshmen", "Fr": "Freshmen"
+      };
 
-    ordered.forEach((groupName) => {
-      const names = roster[groupName];
-      if (!Array.isArray(names) || names.length === 0) return;
+      const normalized = {};
+      for (const [k, v] of Object.entries(raw || {})) {
+        const key = mapToPlural[k] || k;
+        normalized[key] = Array.isArray(v) ? v : [];
+      }
 
-      const groupDiv = document.createElement("div");
-      groupDiv.className = "group";
+      console.log("Roster keys:", Object.keys(normalized));
+      console.log("Roster payload (normalized):", normalized);
+      return normalized;
+    }
 
-      const header = document.createElement("h2");
-      header.textContent = groupName;
-      groupDiv.appendChild(header);
+    function renderRoster(roster) {
+      const container = document.getElementById("playerGroupsContainer");
+      container.innerHTML = "";
 
-      names.forEach((name) => {
-        const label = document.createElement("label");
-        const checkbox = document.createElement("input");
-        checkbox.type = "checkbox";
-        checkbox.dataset.name = name;
-        checkbox.dataset.class = groupName;
+      // Prefer this order first, but render ANY non-empty group
+      const preferred = ["Seniors", "Juniors", "Sophomores", "Freshmen"];
+      const keys = Object.keys(roster || {});
+      const extras = keys.filter(k => !preferred.includes(k)).sort((a,b) => a.localeCompare(b));
+      const ordered = [...preferred, ...extras];
 
-        label.appendChild(checkbox);
-        label.appendChild(document.createTextNode(" " + name));
+      let totalRendered = 0;
 
-        groupDiv.appendChild(label);
-        groupDiv.appendChild(document.createElement("br"));
+      ordered.forEach((groupName) => {
+        const names = roster[groupName];
+        if (!Array.isArray(names) || names.length === 0) return;
+
+        const groupDiv = document.createElement("div");
+        groupDiv.className = "group";
+
+        const header = document.createElement("h2");
+        header.textContent = groupName;
+        groupDiv.appendChild(header);
+
+        names.forEach((name) => {
+          const label = document.createElement("label");
+          const checkbox = document.createElement("input");
+          checkbox.type = "checkbox";
+          checkbox.dataset.name = name;
+          checkbox.dataset.class = groupName;
+
+          label.appendChild(checkbox);
+          label.appendChild(document.createTextNode(" " + name));
+
+          groupDiv.appendChild(label);
+          groupDiv.appendChild(document.createElement("br"));
+        });
+
+        container.appendChild(groupDiv);
+        totalRendered += names.length;
       });
 
-      container.appendChild(groupDiv);
-      totalRendered += names.length;
-    });
-
-    if (totalRendered === 0) {
-      const msg = document.createElement("div");
-      msg.className = "status error";
-      msg.textContent = "No roster rows to display. Check the 'Roster' sheet and headers.";
-      container.appendChild(msg);
+      if (totalRendered === 0) {
+        const msg = document.createElement("div");
+        msg.className = "status error";
+        msg.textContent = "No roster rows to display. Check the 'Roster' sheet and headers.";
+        container.appendChild(msg);
+      }
     }
-  }
 
-  function prepareForm() {
-    const allPlayers = {};
-    document.querySelectorAll('input[type="checkbox"]').forEach((box) => {
-      const cls = box.dataset.class;
-      if (!allPlayers[cls]) allPlayers[cls] = [];
-      allPlayers[cls].push({ name: box.dataset.name, present: box.checked });
-    });
+    // 🔒 Date-safe submit: convert YYYY-MM-DD (picker) → MM/DD/YYYY (string)
+    function prepareForm() {
+      const allPlayers = {};
+      document.querySelectorAll('input[type="checkbox"]').forEach((box) => {
+        const cls = box.dataset.class;
+        if (!allPlayers[cls]) allPlayers[cls] = [];
+        allPlayers[cls].push({ name: box.dataset.name, present: box.checked });
+      });
 
-    document.getElementById("attendanceData").value = JSON.stringify(allPlayers);
-    document.getElementById("formattedDate").value = document.getElementById("attendanceDate").value;
-    return true; // allow form submit
-  }
+      // Serialize attendance payload
+      document.getElementById("attendanceData").value = JSON.stringify(allPlayers);
 
-  window.onload = async function () {
-    setTodayDate();
-    try {
-      const roster = await loadRoster();
-      renderRoster(roster);
-      statusEl.textContent = "Roster loaded.";
-      statusEl.className = "status info";
-    } catch (err) {
-      console.error("Failed to load roster:", err);
-      statusEl.textContent = "Failed to load roster. " + err.message;
-      statusEl.className = "status error";
+      // Normalize date without creating a Date object (avoids TZ/DST issues)
+      const raw = document.getElementById("attendanceDate").value || "";
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(raw)) {
+        alert("Please pick a valid date.");
+        return false;
+      }
+      const [yyyy, mm, dd] = raw.split("-");
+      document.getElementById("formattedDate").value = `${mm}/${dd}/${yyyy}`;
+
+      return true; // allow form submit
     }
-  };
-</script>
+
+    window.onload = async function () {
+      setTodayDate();
+      try {
+        const roster = await loadRoster();
+        renderRoster(roster);
+        statusEl.textContent = "Roster loaded.";
+        statusEl.className = "status info";
+      } catch (err) {
+        console.error("Failed to load roster:", err);
+        statusEl.textContent = "Failed to load roster. " + err.message;
+        statusEl.className = "status error";
+      }
+    };
+  </script>
 </body>
 </html>
